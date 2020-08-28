@@ -92,7 +92,7 @@ jobs:
         EOF
         
         mkdir Godeps
-        cat > /Godeps/Godeps.json << EOF
+        cat > ./Godeps/Godeps.json << EOF
         {
           "ImportPath": "main",
           "GoVersion": "go1",
