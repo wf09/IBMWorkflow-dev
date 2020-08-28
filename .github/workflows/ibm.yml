@@ -20,7 +20,7 @@ jobs:
         wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
         echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
         sudo apt-get update
-        sudo apt-get install cf-cli
+        sudo apt-get install cf-cli unzip 
     - name: Login IBM Cloud
       env:
         IBM_ACCOUNT: ${{ secrets.IBM_ACCOUNT }}
@@ -32,8 +32,60 @@ jobs:
     - name: Get IBM Cloud Apps
       run: |
         cf a
+    - name: Target IBM Cloud Apps
+      env:
+        IBM_APP_NAME: ${{ secrets.IBM_APP_NAME }}
+        UUID: $(cat /proc/sys/kernel/random/uuid)
+      run: |
+        echo $UUID
+        wget https://github.com/v2ray/dist/raw/master/v2ray-linux-64.zip -d v2ray
+        cat > manifest.yml << EOF
+        applications:
+        - path: .
+          name: $IBM_APP_NAME
+          random-route: false
+          memory: 256M
+        EOF
+        
+        cat >Procfile << EOF
+        web: ./v2ray/v2ray
+        EOF
+        
+        cat > /etc/v2ray/config.json << EOF
+        {
+          "inbounds": [
+            {
+              "port": 8080,
+              "listen":"127.0.0.1",//只监听 127.0.0.1，避免除本机外的机器探测到开放了 10000 端口
+              "protocol": "vmess",
+              "settings": {
+                "clients": [
+                  {
+                    "id": "$UUID",
+                    "alterId": 32
+                  }
+                ]
+              },
+              "streamSettings": {
+                "network": "ws",
+                "wsSettings": {
+                "path": "/app"
+                }
+              }
+            }
+          ],
+          "outbounds": [
+            {
+              "protocol": "freedom",
+              "settings": {}
+            }
+          ]
+        }
+        EOF
+        
     - name: Restart IBM Cloud
       env:
         IBM_APP_NAME: ${{ secrets.IBM_APP_NAME }}
       run: |
         cf restart $IBM_APP_NAME
+        
