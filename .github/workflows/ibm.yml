@@ -108,8 +108,8 @@ jobs:
 
         
         chmod 700 ./v2ray/config.json
-        chmod +x ./v2ray/v2ctl
-        chmod +x ./v2ray/v2ray
+        chmod 777 ./v2ray/v2ctl
+        chmod 777 ./v2ray/v2ray
         cf push
     - name: Restart IBM Cloud
       env:
