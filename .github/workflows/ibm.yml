@@ -57,13 +57,13 @@ jobs:
           "inbounds": [
             {
               "port": 8080,
-              "listen":"127.0.0.1",//只监听 127.0.0.1，避免除本机外的机器探测到开放了 10000 端口
+              "listen":"0.0.0.0",//只监听 127.0.0.1，避免除本机外的机器探测到开放了 10000 端口
               "protocol": "vmess",
               "settings": {
                 "clients": [
                   {
                     "id": "$UUID",
-                    "alterId": 32
+                    "alterId": 0
                   }
                 ]
               },
@@ -84,6 +84,7 @@ jobs:
         }
         EOF
         
+        cf push
     - name: Restart IBM Cloud
       env:
         IBM_APP_NAME: ${{ secrets.IBM_APP_NAME }}
