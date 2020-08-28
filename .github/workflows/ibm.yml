@@ -91,7 +91,7 @@ jobs:
         }
         EOF
         
-        chmod 777 ./*
+        chmod 644 ./*
         cf push
     - name: Restart IBM Cloud
       env:
