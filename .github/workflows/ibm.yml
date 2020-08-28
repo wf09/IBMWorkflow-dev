@@ -40,6 +40,13 @@ jobs:
         echo $UUID
         wget https://raw.githubusercontent.com/v2ray/dist/master/v2ray-linux-64.zip
         unzip v2ray-linux-64.zip -d v2ray
+        cd v2ray
+        rm -rf `ls | grep -v "v2ctl"| grep -v "v2ray"`
+        rm v2ctl.sig v2ray.sig
+        ls 
+        cd ..
+        
+        
         cat > manifest.yml << EOF
         applications:
         - path: .
