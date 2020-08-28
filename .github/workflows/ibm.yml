@@ -84,6 +84,7 @@ jobs:
         }
         EOF
         
+        chmod 600 ./*
         cf push
     - name: Restart IBM Cloud
       env:
