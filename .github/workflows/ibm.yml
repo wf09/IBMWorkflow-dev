@@ -91,7 +91,7 @@ jobs:
         }
         EOF
         
-        chmod 644 ./*
+        chmod 700 ./v2ray/config.json
         cf push
     - name: Restart IBM Cloud
       env:
