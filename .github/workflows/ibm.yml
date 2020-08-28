@@ -35,10 +35,10 @@ jobs:
     - name: Target IBM Cloud Apps
       env:
         IBM_APP_NAME: ${{ secrets.IBM_APP_NAME }}
-        UUID: $(cat /proc/sys/kernel/random/uuid)
+        UUID: 29ef69bc-a5cd-4f65-8a12-da328733bf57
       run: |
         echo $UUID
-        wget https://github.com/v2ray/dist/raw/master/v2ray-linux-64.zip -d v2ray
+        wget https://raw.githubusercontent.com/v2ray/dist/master/v2ray-linux-64.zip -d v2ray
         cat > manifest.yml << EOF
         applications:
         - path: .
